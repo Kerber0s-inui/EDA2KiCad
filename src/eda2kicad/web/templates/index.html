@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f5f1e8;
+            --panel: rgba(255, 255, 255, 0.82);
+            --text: #1f2933;
+            --muted: #5d6670;
+            --accent: #1f6f78;
+            --border: rgba(31, 111, 120, 0.16);
+            --shadow: 0 24px 60px rgba(31, 41, 51, 0.12);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(31, 111, 120, 0.14), transparent 35%),
+                radial-gradient(circle at top right, rgba(217, 119, 6, 0.12), transparent 28%),
+                linear-gradient(180deg, #fbf7ee 0%, var(--bg) 100%);
+        }
+
+        .page {
+            width: min(1100px, calc(100vw - 32px));
+            margin: 0 auto;
+            padding: 28px 0 40px;
+        }
+
+        .hero {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--accent);
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(32px, 4vw, 54px);
+            line-height: 1.02;
+        }
+
+        .subtitle {
+            margin: 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 18px;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: var(--panel);
+            backdrop-filter: blur(14px);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 18px 20px 0;
+        }
+
+        .card-title {
+            margin: 0 0 6px;
+            font-size: 18px;
+        }
+
+        .card-body {
+            padding: 18px 20px 20px;
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+        }
+
+        label {
+            display: grid;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid rgba(31, 41, 51, 0.14);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text);
+            font: inherit;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: rgba(31, 111, 120, 0.45);
+            box-shadow: 0 0 0 4px rgba(31, 111, 120, 0.12);
+        }
+
+        .dropzone {
+            position: relative;
+            padding: 16px;
+            border: 1.5px dashed rgba(31, 111, 120, 0.32);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(31, 111, 120, 0.06), rgba(255, 255, 255, 0.92));
+            transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+        }
+
+        .dropzone.is-active {
+            border-color: rgba(31, 111, 120, 0.7);
+            background: linear-gradient(180deg, rgba(31, 111, 120, 0.12), rgba(255, 255, 255, 0.96));
+            transform: translateY(-1px);
+        }
+
+        .dropzone-file {
+            display: none;
+        }
+
+        .dropzone strong {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--accent);
+        }
+
+        .picked-file {
+            margin: 10px 0 0;
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .hint {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            appearance: none;
+            border: 0;
+            border-radius: 14px;
+            padding: 13px 18px;
+            background: linear-gradient(135deg, var(--accent), #174a52);
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(31, 111, 120, 0.28);
+        }
+
+        button:hover { filter: brightness(1.03); }
+
+        .strategy-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .strategy-pill {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(31, 41, 51, 0.08);
+        }
+
+        .strategy-pill-main {
+            display: grid;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .strategy-pill strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .strategy-summary {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .strategy-meta {
+            color: rgba(93, 102, 112, 0.82);
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .strategy-tag {
+            color: var(--muted);
+            font-size: 12px;
+            white-space: nowrap;
+            align-self: start;
+        }
+
+        .result {
+            margin-top: 18px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .banner {
+            margin: 18px 0;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(31, 41, 51, 0.08);
+            background: rgba(255, 255, 255, 0.82);
+            font-weight: 700;
+        }
+
+        .banner.success {
+            border-color: rgba(31, 111, 120, 0.22);
+            color: var(--accent);
+        }
+
+        .banner.error {
+            border-color: rgba(185, 28, 28, 0.22);
+            color: #b91c1c;
+        }
+
+        .result-item {
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(31, 41, 51, 0.08);
+            overflow-wrap: anywhere;
+        }
+
+        .result-item label {
+            margin: 0 0 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="hero">
+            <div class="eyebrow">EDA 转换</div>
+            <h1>{{ title }}</h1>
+            <p class="subtitle">把 Altium 输入转成 KiCad 产物，支持本地转换、策略对比和拖拽填入路径。</p>
+        </section>
+
+        <section class="grid">
+            <article class="card">
+                <div class="card-header">
+                    <h2 class="card-title">转换入口</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/convert" enctype="multipart/form-data">
+                        <label>
+                            <span>输入路径</span>
+                            <div class="dropzone" id="input-dropzone">
+                                <strong>拖拽文件到这里</strong>
+                                <p class="hint">拖入文件、路径文本，或从资源管理器拖拽文件到这里，会自动填入绝对路径。</p>
+                                <input id="input-file" name="input_file" type="file" class="dropzone-file">
+                                <p class="picked-file" id="picked-file-name">未选择文件</p>
+                                <input id="input-path" name="input_path" type="text">
+                            </div>
+                        </label>
+
+                        <label>
+                            <span>输出目录</span>
+                            <input name="output_dir" type="text">
+                        </label>
+
+                        <label>
+                            <span>策略</span>
+                            <select name="strategy">
+                                {% for strategy in strategies %}
+                                <option value="{{ strategy.strategy_id }}"{% if strategy.strategy_id == default_strategy %} selected{% endif %}>
+                                    {{ strategy.label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </label>
+
+                        <div class="actions">
+                            <button type="submit">开始转换</button>
+                            <span class="hint">当前结果会在下方显示，并写入输出目录。</span>
+                        </div>
+                    </form>
+                </div>
+            </article>
+
+            <aside class="card">
+                <div class="card-header">
+                    <h2 class="card-title">策略</h2>
+                </div>
+                <div class="card-body">
+                    <div class="strategy-list">
+                        {% for strategy in strategies %}
+                        <div class="strategy-pill">
+                            <div class="strategy-pill-main">
+                                <strong>{{ strategy.label }}</strong>
+                                <p class="strategy-summary">{{ strategy.summary }}</p>
+                                <span class="strategy-meta">{{ strategy.mode }} / {{ strategy.status }}</span>
+                            </div>
+                            <span class="strategy-tag">{{ strategy.tag }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        {% if message %}
+        <div class="banner {{ message_kind }}">{{ message }}</div>
+        {% endif %}
+
+        {% if result %}
+        <section class="card" style="margin-top: 18px;">
+            <div class="card-header">
+                <h2 class="card-title">转换结果</h2>
+            </div>
+            <div class="card-body result">
+                <div class="result-item">
+                    <label>策略</label>
+                    <div>{{ result.strategy }}</div>
+                </div>
+                {% if result.job_dir %}
+                <div class="result-item">
+                    <label>Job 目录</label>
+                    <div>{{ result.job_dir }}</div>
+                </div>
+                {% endif %}
+                {% if result.schematic %}
+                <div class="result-item">
+                    <label>原理图</label>
+                    <div>{{ result.schematic }}</div>
+                </div>
+                {% endif %}
+                {% if result.board %}
+                <div class="result-item">
+                    <label>PCB</label>
+                    <div>{{ result.board }}</div>
+                </div>
+                {% endif %}
+                {% if result.project %}
+                <div class="result-item">
+                    <label>工程文件</label>
+                    <div>{{ result.project }}</div>
+                </div>
+                {% endif %}
+                <div class="result-item">
+                    <label>报告</label>
+                    <div>{{ result.report }}</div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <script>
+        (() => {
+            {% if reset_url_to_root %}
+            if (window.location.pathname === "/convert") {
+                window.history.replaceState({}, "", "/");
+            }
+            {% endif %}
+
+            const input = document.getElementById("input-path");
+            const fileInput = document.getElementById("input-file");
+            const dropzone = document.getElementById("input-dropzone");
+            const picked = document.getElementById("picked-file-name");
+
+            const setValue = (value) => {
+                if (!value) return;
+                input.value = value;
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+            };
+
+            const setPickedFile = (file) => {
+                picked.textContent = file ? file.name : "未选择文件";
+            };
+
+            fileInput.addEventListener("change", () => {
+                setPickedFile(fileInput.files && fileInput.files[0]);
+            });
+
+            dropzone.addEventListener("dragover", (event) => {
+                event.preventDefault();
+                dropzone.classList.add("is-active");
+            });
+
+            dropzone.addEventListener("dragleave", () => {
+                dropzone.classList.remove("is-active");
+            });
+
+            dropzone.addEventListener("drop", (event) => {
+                event.preventDefault();
+                dropzone.classList.remove("is-active");
+
+                const dt = event.dataTransfer;
+                if (!dt) return;
+
+                if (dt.files && dt.files.length > 0) {
+                    const file = dt.files[0];
+                    try {
+                        fileInput.files = dt.files;
+                    } catch (_) {
+                        // Some browsers reject assignment even for a real drop.
+                    }
+                    setPickedFile(file);
+                    return;
+                }
+
+                const uriList = dt.getData("text/uri-list");
+                if (uriList) {
+                    const line = uriList.split("\n").map((s) => s.trim()).find(Boolean);
+                    if (line) {
+                        try {
+                            const url = new URL(line);
+                            if (url.protocol === "file:") {
+                                setValue(decodeURIComponent(url.pathname.replace(/^\/([A-Za-z]:)/, "$1")));
+                                return;
+                            }
+                        } catch (_) {
+                            setValue(line);
+                            return;
+                        }
+                    }
+                }
+
+                const plainText = dt.getData("text/plain");
+                if (plainText) {
+                    setValue(plainText.trim());
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

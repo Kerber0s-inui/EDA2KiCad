@@ -1,0 +1,11 @@
+.venv/
+.deps/
+vendor_pydeps/
+node_modules/
+outputs/
+
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+*.lck

@@ -1,0 +1,7 @@
+[
+  {
+    "name": "minimal_ascii_demo",
+    "input": "tests/fixtures/altium_ascii/minimal_ascii_schematic.txt",
+    "expected_error_count": 0
+  }
+]

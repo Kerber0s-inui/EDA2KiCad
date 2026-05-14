@@ -1,0 +1,28 @@
+[project]
+name = "eda2kicad"
+dynamic = ["version"]
+description = "EDA to KiCad conversion tools"
+requires-python = ">=3.11"
+dependencies = [
+    "typer",
+    "fastapi",
+    "uvicorn",
+    "jinja2",
+    "pywinauto",
+    "psutil",
+    "Pillow",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = { attr = "eda2kicad.__version__" }
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-p no:cacheprovider"
